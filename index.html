@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日汉服 · 一站式汉服文化生活方式平台</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #2B1810;
+    --ink-soft: #4A3527;
+    --ink-light: #8B6F5E;
+    --paper: #F7F1E6;
+    --paper-warm: #FBF6EE;
+    --paper-deep: #EDE3D1;
+    --line: #D9CCB4;
+    --line-soft: #E8DFCB;
+    --cinnabar: #B4312A;
+    --cinnabar-soft: #D45A4D;
+    --cinnabar-deep: #8B1A1A;
+    --gold: #C9A96E;
+    --gold-bright: #E8C782;
+    --jade: #6B8E6F;
+    --shadow-sm: 0 2px 8px rgba(43,24,16,0.04);
+    --shadow: 0 4px 20px rgba(43,24,16,0.08);
+    --shadow-lg: 0 16px 48px rgba(43,24,16,0.12);
+    --shadow-ink: 0 8px 32px rgba(43,24,16,0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 24px;
+  }
+
+  html, body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+    letter-spacing: 0.02em;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -1;
+    background-image: radial-gradient(circle at 1px 1px, var(--gold) 0.8px, transparent 0);
+    background-size: 28px 28px;
+    opacity: 0.025;
+    pointer-events: none;
+  }
+
+  /* ===== NAV ===== */
+  .top-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(247,241,230,0.88); backdrop-filter: blur(20px);
+    padding: 0 40px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(201,169,110,0.2);
+  }
+
+  .brand-wrap { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .brand-seal {
+    width: 36px; height: 36px; background: var(--cinnabar);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(180,49,42,0.25);
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand-name { font-family: 'Noto Serif SC', serif; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.15em; }
+  .brand-sub { font-size: 0.62rem; color: var(--ink-light); letter-spacing: 0.3em; }
+
+  .nav-tabs { display: flex; gap: 4px; list-style: none; }
+  .nav-tabs button {
+    background: none; border: none; color: var(--ink-soft);
+    padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer;
+    font-size: 0.88rem; font-family: inherit; letter-spacing: 0.05em;
+    transition: all 0.25s; font-weight: 500; position: relative;
+  }
+  .nav-tabs button:hover { color: var(--cinnabar); background: rgba(180,49,42,0.05); }
+  .nav-tabs button.active { color: var(--cinnabar); background: rgba(180,49,42,0.08); }
+  .nav-tabs button.active::after {
+    content: ''; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 3px; background: var(--cinnabar); border-radius: 2px;
+  }
+
+  .user-area { display: flex; align-items: center; gap: 12px; }
+  .btn-outline {
+    padding: 8px 20px; border-radius: 22px; cursor: pointer;
+    font-size: 0.82rem; font-family: inherit; font-weight: 500;
+    border: 1px solid var(--line); color: var(--ink-soft);
+    background: transparent; transition: all 0.25s; letter-spacing: 0.05em;
+  }
+  .btn-outline:hover { border-color: var(--cinnabar); color: var(--cinnabar); background: rgba(180,49,42,0.04); }
+  .btn-primary {
+    padding: 8px 20px; border-radius: 22px; cursor: pointer;
+    font-size: 0.82rem; font-family: inherit; font-weight: 500;
+    border: none; background: var(--cinnabar); color: #fff;
+    transition: all 0.25s; box-shadow: 0 2px 8px rgba(180,49,42,0.2); letter-spacing: 0.05em;
+  }
+  .btn-primary:hover { background: var(--cinnabar-deep); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(180,49,42,0.3); }
+
+  /* ===== LAYOUT ===== */
+  .main-content { padding-top: 64px; }
+  .page { display: none; padding: 40px 40px 100px; max-width: 1280px; margin: 0 auto; }
+  .page.active { display: block; animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header { text-align: center; margin: 56px 0 32px; }
+  .section-label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.5em;
+    color: var(--cinnabar); text-transform: uppercase; font-weight: 500; margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Noto Serif SC', serif; font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700; color: var(--ink); letter-spacing: 0.12em;
+    display: inline-block; padding: 0 40px; position: relative;
+  }
+  .section-title::before, .section-title::after {
+    content: '—'; color: var(--gold); font-size: 1rem;
+    position: absolute; top: 50%; transform: translateY(-50%);
+  }
+  .section-title::before { left: 0; }
+  .section-title::after { right: 0; }
+  .section-subtitle { color: var(--ink-light); font-size: 0.9rem; margin-top: 10px; letter-spacing: 0.05em; }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; overflow: hidden; border-radius: var(--radius-lg);
+    padding: 72px 56px; margin-bottom: 56px;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(201,169,110,0.2), transparent 50%),
+      radial-gradient(ellipse at 85% 80%, rgba(180,49,42,0.1), transparent 50%),
+      linear-gradient(180deg, #FBF6EE 0%, #F7F1E6 100%);
+    border: 1px solid var(--line-soft); box-shadow: var(--shadow);
+  }
+  .hero::before {
+    content: '裳'; position: absolute; top: 30px; right: 50px;
+    font-family: 'Noto Serif SC', serif; font-size: 12rem; font-weight: 900;
+    color: rgba(180,49,42,0.04); line-height: 1; pointer-events: none; letter-spacing: 0.05em;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; border-radius: 20px;
+    background: rgba(180,49,42,0.08); color: var(--cinnabar);
+    font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 20px; font-weight: 500;
+  }
+  .hero-tag .dot { width: 6px; height: 6px; background: var(--cinnabar); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .hero h1 {
+    font-family: 'Noto Serif SC', serif; font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2;
+    color: var(--ink); margin-bottom: 18px; letter-spacing: 0.08em;
+  }
+  .hero h1 .accent { color: var(--cinnabar); position: relative; display: inline-block; }
+  .hero h1 .accent::after {
+    content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 14px;
+    background: rgba(201,169,110,0.35); z-index: -1; border-radius: 2px;
+  }
+  .hero p { font-size: 1.05rem; color: var(--ink-soft); max-width: 520px; line-height: 1.85; margin-bottom: 32px; }
+
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-hero {
+    padding: 13px 32px; border-radius: 30px; font-size: 0.92rem;
+    font-family: inherit; cursor: pointer; font-weight: 500;
+    transition: all 0.3s; border: 1.5px solid var(--ink);
+    background: var(--ink); color: var(--paper); letter-spacing: 0.1em;
+  }
+  .btn-hero:hover { background: var(--cinnabar); border-color: var(--cinnabar); transform: translateY(-2px); box-shadow: var(--shadow-ink); }
+  .btn-hero-outline {
+    padding: 13px 32px; border-radius: 30px; font-size: 0.92rem;
+    font-family: inherit; cursor: pointer; font-weight: 500;
+    transition: all 0.3s; background: transparent;
+    color: var(--ink); border: 1.5px solid var(--line); letter-spacing: 0.1em;
+  }
+  .btn-hero-outline:hover { border-color: var(--cinnabar); color: var(--cinnabar); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;
+    margin-top: 48px; padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .hero-stat .num {
+    font-family: 'Noto Serif SC', serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--ink); display: block; margin-bottom: 4px;
+  }
+  .hero-stat .label { font-size: 0.78rem; color: var(--ink-light); letter-spacing: 0.08em; }
+
+  /* ===== WIDGET ===== */
+  .quickstart-widget {
+    background: #fff; border-radius: var(--radius-lg);
+    padding: 36px 40px; box-shadow: var(--shadow);
+    border: 1px solid var(--line-soft); margin-bottom: 48px;
+  }
+  .qs-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .qs-title { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: 0.1em; }
+  .qs-hint { font-size: 0.78rem; color: var(--ink-light); letter-spacing: 0.1em; }
+  .qs-step { display: none; animation: fadeIn 0.3s; }
+  .qs-step.active { display: block; }
+  .qs-question { font-family: 'Noto Serif SC', serif; font-size: 1rem; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.05em; }
+  .qs-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+  .qs-option {
+    padding: 18px 14px; border: 1.5px solid var(--line); border-radius: var(--radius);
+    cursor: pointer; text-align: center; background: var(--paper-warm);
+    transition: all 0.25s; font-family: inherit; color: var(--ink-soft);
+    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.08em;
+  }
+  .qs-option .emoji { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+  .qs-option:hover { border-color: var(--cinnabar); color: var(--cinnabar); transform: translateY(-2px); background: rgba(180,49,42,0.03); }
+
+  .qs-progress {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--line);
+  }
+  .qs-dots { display: flex; gap: 8px; }
+  .qs-dot { width: 32px; height: 4px; background: var(--line); border-radius: 2px; transition: all 0.3s; }
+  .qs-dot.active { background: var(--cinnabar); }
+
+  .result-card { text-align: center; padding: 16px 0; }
+  .result-headline { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--cinnabar); margin-bottom: 12px; letter-spacing: 0.15em; }
+  .result-summary { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.8; }
+
+  /* ===== GRID ===== */
+  .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .content-card {
+    background: #fff; border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm); transition: all 0.3s; cursor: pointer;
+    border: 1px solid rgba(201,169,110,0.1);
+  }
+  .content-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .cc-cover {
+    aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .cc-cover span { font-size: 3.5rem; position: relative; z-index: 1; }
+  .cc-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    padding: 4px 12px; border-radius: 12px; background: rgba(255,255,255,0.95);
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+  }
+  .cc-body { padding: 16px 18px 18px; }
+  .cc-body h4 { font-size: 0.95rem; color: var(--ink); margin-bottom: 6px; font-weight: 600; line-height: 1.5; }
+  .cc-body p { font-size: 0.88rem; color: var(--ink-light); line-height: 1.7; }
+  .cc-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-soft);
+    color: var(--ink-light); font-size: 0.75rem;
+  }
+
+  /* ===== KNOWLEDGE ===== */
+  .dynasty-tabs {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px;
+    padding: 16px; background: #fff; border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line-soft);
+  }
+  .dynasty-btn {
+    padding: 12px 26px; border-radius: var(--radius); border: 1.5px solid var(--line);
+    background: var(--paper-warm); cursor: pointer; font-family: inherit;
+    font-size: 0.9rem; letter-spacing: 0.15em; color: var(--ink-soft);
+    transition: all 0.25s; display: flex; align-items: center; gap: 8px; font-weight: 500;
+  }
+  .dynasty-btn:hover { border-color: var(--gold); color: var(--ink); transform: translateY(-1px); }
+  .dynasty-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); box-shadow: var(--shadow-ink); }
+
+  .knowledge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .knowledge-card {
+    background: #fff; border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.3s;
+    border: 1px solid rgba(201,169,110,0.1); display: flex; flex-direction: column;
+  }
+  .knowledge-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .kc-img {
+    height: 120px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .kc-img::after {
+    content: ''; position: absolute; bottom: 0; right: 0;
+    width: 80px; height: 80px; background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+  }
+  .kc-body { padding: 18px 20px; }
+  .kc-tag { display: inline-block; padding: 2px 10px; border-radius: 10px; background: rgba(201,169,110,0.15); color: var(--cinnabar); font-size: 0.7rem; letter-spacing: 0.1em; margin-bottom: 8px; font-weight: 500; }
+  .kc-body h4 { font-size: 1rem; color: var(--ink); margin-bottom: 6px; font-weight: 600; }
+  .kc-body p { font-size: 0.85rem; color: var(--ink-light); line-height: 1.8; }
+
+  /* ===== MALL ===== */
+  .mall-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px;
+    padding: 14px; background: #fff; border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line-soft);
+  }
+  .mall-btn {
+    padding: 10px 20px; border-radius: var(--radius); border: 1.5px solid var(--line);
+    background: var(--paper-warm); cursor: pointer; font-family: inherit;
+    font-size: 0.85rem; letter-spacing: 0.1em; color: var(--ink-soft);
+    transition: all 0.25s; font-weight: 500;
+  }
+  .mall-btn:hover { border-color: var(--cinnabar); color: var(--cinnabar); }
+  .mall-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .mall-item {
+    background: #fff; border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm); transition: all 0.3s; cursor: pointer;
+    border: 1px solid rgba(201,169,110,0.1);
+  }
+  .mall-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .mi-cover { aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; position: relative; }
+  .mi-badge {
+    position: absolute; top: 12px; right: 12px; padding: 4px 10px;
+    border-radius: 10px; background: var(--ink); color: var(--paper);
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; z-index: 2;
+  }
+  .mi-cover span { font-size: 3rem; position: relative; z-index: 1; }
+  .mi-body { padding: 14px 16px 16px; }
+  .mi-body h4 { font-size: 0.92rem; color: var(--ink); margin-bottom: 6px; font-weight: 600; line-height: 1.4; }
+  .mi-body p { font-size: 0.8rem; color: var(--ink-light); line-height: 1.6; margin-bottom: 12px; }
+  .mi-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px; border-top: 1px dashed var(--line-soft);
+  }
+  .mi-price { font-family: 'Noto Serif SC', serif; font-size: 1.05rem; color: var(--cinnabar); font-weight: 700; letter-spacing: 0.05em; }
+  .mi-contact {
+    padding: 6px 16px; border-radius: 18px; border: 1.5px solid var(--cinnabar);
+    background: transparent; color: var(--cinnabar); cursor: pointer;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .mi-contact:hover { background: var(--cinnabar); color: #fff; }
+
+  /* ===== COMMUNITY ===== */
+  .community-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+  .post-btn {
+    width: 100%; padding: 14px; border: 2px dashed var(--line); border-radius: var(--radius-lg);
+    background: transparent; cursor: pointer; font-family: inherit; font-size: 0.88rem;
+    color: var(--ink-light); transition: all 0.25s; margin-bottom: 16px; font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .post-btn:hover { border-color: var(--cinnabar); color: var(--cinnabar); background: rgba(180,49,42,0.03); }
+
+  .post-list { display: flex; flex-direction: column; gap: 16px; }
+  .post-card {
+    background: #fff; border-radius: var(--radius-lg); padding: 24px;
+    box-shadow: var(--shadow-sm); transition: transform 0.2s; cursor: pointer;
+    border: 1px solid var(--line-soft);
+  }
+  .post-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .post-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 600; font-size: 0.88rem; flex-shrink: 0;
+  }
+  .post-user { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .post-time { font-size: 0.72rem; color: var(--ink-light); }
+  .post-title { font-size: 1.02rem; color: var(--ink); margin-bottom: 8px; font-weight: 600; line-height: 1.4; }
+  .post-content { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.85; margin-bottom: 14px; }
+  .post-images { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .post-img {
+    width: 100px; height: 100px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: #fff; cursor: pointer; transition: transform 0.2s;
+  }
+  .post-img:hover { transform: scale(1.03); }
+  .post-actions { display: flex; gap: 22px; font-size: 0.82rem; color: var(--ink-light); padding-top: 14px; border-top: 1px dashed var(--line-soft); }
+  .post-actions span { cursor: pointer; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
+  .post-actions span:hover { color: var(--cinnabar); }
+
+  .sidebar-card {
+    background: #fff; border-radius: var(--radius-lg); padding: 22px;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line-soft); margin-bottom: 16px;
+  }
+  .sidebar-card h4 {
+    font-family: 'Noto Serif SC', serif; font-size: 0.98rem; margin-bottom: 14px;
+    color: var(--ink); letter-spacing: 0.15em; border-left: 3px solid var(--cinnabar);
+    padding-left: 12px;
+  }
+  .hot-tag {
+    display: inline-block; padding: 5px 12px; border-radius: 14px;
+    background: var(--paper-deep); font-size: 0.75rem; color: var(--ink-soft);
+    margin: 3px 4px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+  }
+  .hot-tag:hover { background: rgba(180,49,42,0.08); color: var(--cinnabar); border-color: rgba(180,49,42,0.15); }
+
+  .recommend-user { display: flex; align-items: center; gap: 10px; padding: 10px 4px; cursor: pointer; border-radius: var(--radius-sm); transition: background 0.2s; }
+  .recommend-user:hover { background: var(--paper-warm); }
+  .ru-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+  .ru-fans { font-size: 0.7rem; color: var(--ink-light); }
+  .ru-follow { padding: 4px 14px; border-radius: 14px; border: 1px solid var(--line); font-size: 0.72rem; background: transparent; cursor: pointer; color: var(--ink-soft); font-family: inherit; transition: all 0.2s; }
+  .ru-follow:hover { border-color: var(--cinnabar); color: var(--cinnabar); }
+
+  .daily-quote {
+    font-family: 'Noto Serif SC', serif; color: var(--ink-soft); font-size: 0.88rem;
+    line-height: 2; letter-spacing: 0.05em;
+  }
+  .daily-quote .attr { font-size: 0.75rem; color: var(--ink-light); margin-top: 8px; display: block; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(43,24,16,0.55); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--paper-warm); border-radius: var(--radius-lg);
+    padding: 40px; width: 420px; max-width: 90vw;
+    box-shadow: var(--shadow-ink); text-align: center;
+    border: 1px solid var(--line-soft); position: relative;
+  }
+  .modal .seal-mark {
+    display: inline-block; padding: 3px 12px; background: var(--cinnabar); color: #fff;
+    font-family: 'Noto Serif SC', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+    border-radius: 2px; margin-bottom: 18px;
+  }
+  .modal h3 { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; margin-bottom: 6px; color: var(--ink); letter-spacing: 0.1em; }
+  .modal .modal-sub { color: var(--ink-light); font-size: 0.85rem; margin-bottom: 24px; letter-spacing: 0.05em; }
+  .modal .form-group { margin-bottom: 14px; text-align: left; }
+  .modal .form-group label { display: block; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 6px; letter-spacing: 0.1em; font-weight: 500; }
+  .modal .form-group input {
+    width: 100%; padding: 12px 16px; border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm); font-size: 0.92rem; font-family: inherit;
+    outline: none; transition: border-color 0.2s; background: #fff; color: var(--ink);
+  }
+  .modal .form-group input:focus { border-color: var(--cinnabar); }
+  .modal .submit-btn {
+    width: 100%; padding: 14px; font-size: 0.92rem; margin-top: 8px;
+    background: var(--ink); color: var(--paper); border: none;
+    border-radius: var(--radius-sm); cursor: pointer; font-family: inherit;
+    font-weight: 500; letter-spacing: 0.15em; transition: all 0.25s;
+  }
+  .modal .submit-btn:hover { background: var(--cinnabar); }
+  .modal .switch-link { margin-top: 18px; font-size: 0.82rem; color: var(--ink-light); cursor: pointer; }
+  .modal .switch-link span { color: var(--cinnabar); font-weight: 500; }
+  .modal .close-modal { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ink-light); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--paper); padding: 12px 28px;
+    border-radius: 28px; font-size: 0.85rem; z-index: 300;
+    opacity: 0; pointer-events: none; transition: all 0.3s; box-shadow: var(--shadow-ink);
+    letter-spacing: 0.1em; border: 1px solid rgba(201,169,110,0.2);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 960px) {
+    .top-nav { padding: 0 16px; height: 56px; }
+    .nav-tabs { display: none; }
+    .page { padding: 20px 16px 80px; }
+    .hero { padding: 40px 24px; margin-bottom: 36px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .community-layout { grid-template-columns: 1fr; }
+    .brand-seal { width: 32px; height: 32px; font-size: 0.85rem; }
+    .brand-name { font-size: 0.95rem; }
+    .brand-sub { display: none; }
+    .quickstart-widget { padding: 24px 20px; }
+    .qs-options { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .hero { padding: 32px 20px; }
+    .hero h1 { font-size: 1.8rem; }
+    .dynasty-btn { padding: 10px 16px; font-size: 0.82rem; }
+    .qs-options { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="brand-wrap" onclick="switchPage('home')">
+    <div class="brand-seal">汉</div>
+    <div class="brand-text">
+      <span class="brand-name">今日汉服</span>
+      <span class="brand-sub">HANFU · TODAY</span>
+    </div>
+  </div>
+  <ul class="nav-tabs">
+    <li><button class="active" data-page="home">首页</button></li>
+    <li><button data-page="knowledge">衣冠谱系</button></li>
+    <li><button data-page="mall">汉服商城</button></li>
+    <li><button data-page="community">同袍圈</button></li>
+  </ul>
+  <div class="user-area" id="userArea">
+    <button class="btn-outline" onclick="openModal('login')">登录</button>
+    <button class="btn-primary" onclick="openModal('register')">注册</button>
+  </div>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <span class="seal-mark" id="modalSeal">欢 迎 归 来</span>
+    <h3 id="modalTitle">今日汉服</h3>
+    <p class="modal-sub" id="modalSub">穿一件喜欢的，去做喜欢的事</p>
+    <form id="authForm" onsubmit="handleAuth(event)">
+      <div class="form-group" id="nameGroup" style="display:none;">
+        <label>昵称</label>
+        <input type="text" id="inputName" placeholder="给自己起个名字">
+      </div>
+      <div class="form-group">
+        <label>手机号 / 邮箱</label>
+        <input type="text" id="inputAccount" placeholder="请输入手机号或邮箱">
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" id="inputPassword" placeholder="请输入密码">
+      </div>
+      <button type="submit" class="submit-btn" id="authSubmit">登 录</button>
+    </form>
+    <p class="switch-link" id="switchText">
+      还没有账号？<span onclick="switchAuthMode()">立即注册</span>
+    </p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-tag"><span class="dot"></span>穿一件喜欢的，去做喜欢的事</div>
+      <h1>让<span class="accent">汉服</span>走进<br>你的每一个日常</h1>
+      <p>从秦汉到明清，从通勤到节日。为普通人量身打造的汉服生活方式平台——不需要勇气，只需要一件合适的衣裳。</p>
+      <div class="cta-row">
+        <button class="btn-hero" onclick="switchPage('knowledge')">浏览衣冠谱系 →</button>
+        <button class="btn-hero-outline" onclick="switchPage('mall')">逛逛汉服商城</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num">5,280+</span><span class="label">原创穿搭方案</span></div>
+        <div class="hero-stat"><span class="num">320+</span><span class="label">合作设计师</span></div>
+        <div class="hero-stat"><span class="num">18,600</span><span class="label">真实出门打卡</span></div>
+        <div class="hero-stat"><span class="num">秦汉-明清</span><span class="label">8个朝代服饰</span></div>
+      </div>
+    </div>
+
+    <!-- Quick outfit -->
+    <div class="quickstart-widget">
+      <div class="qs-label">
+        <span class="qs-title">三步找到你的今日汉服</span>
+        <span class="qs-hint" id="qsHint">STEP 1 / 3</span>
+      </div>
+      <div class="qs-step active" data-step="1">
+        <h3 class="qs-question">今天去做什么？</h3>
+        <div class="qs-options">
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '通勤上班')"><span class="emoji">💼</span>通勤上班</button>
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '周末休闲')"><span class="emoji">☕</span>周末休闲</button>
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '约会聚会')"><span class="emoji">🌸</span>约会聚会</button>
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '外出拍照')"><span class="emoji">📷</span>外出拍照</button>
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '节日活动')"><span class="emoji">🏮</span>节日活动</button>
+          <button class="qs-option" onclick="chooseOption(this, 'scene', '正式场合')"><span class="emoji">🎋</span>正式场合</button>
+        </div>
+      </div>
+      <div class="qs-step" data-step="2">
+        <h3 class="qs-question">偏好哪种风格？</h3>
+        <div class="qs-options">
+          <button class="qs-option" onclick="chooseOption(this, 'style', '清雅宋制')"><span class="emoji">🪷</span>清雅宋制</button>
+          <button class="qs-option" onclick="chooseOption(this, 'style', '华丽唐制')"><span class="emoji">👗</span>华丽唐制</button>
+          <button class="qs-option" onclick="chooseOption(this, 'style', '端庄明制')"><span class="emoji">👘</span>端庄明制</button>
+          <button class="qs-option" onclick="chooseOption(this, 'style', '简雅汉元素')"><span class="emoji">🎐</span>简雅汉元素</button>
+          <button class="qs-option" onclick="chooseOption(this, 'style', '潇洒魏晋')"><span class="emoji">🎋</span>潇洒魏晋</button>
+          <button class="qs-option" onclick="chooseOption(this, 'style', '都可以')"><span class="emoji">✨</span>都可以</button>
+        </div>
+      </div>
+      <div class="qs-step" data-step="3">
+        <h3 class="qs-question">预算范围？</h3>
+        <div class="qs-options">
+          <button class="qs-option" onclick="chooseOption(this, 'budget', '入门级 · 300元内')"><span class="emoji">🌱</span>入门 · 300元内</button>
+          <button class="qs-option" onclick="chooseOption(this, 'budget', '大众级 · 300-800')"><span class="emoji">🎋</span>大众 · 300-800</button>
+          <button class="qs-option" onclick="chooseOption(this, 'budget', '品质级 · 800-2000')"><span class="emoji">🪷</span>品质 · 800-2000</button>
+          <button class="qs-option" onclick="chooseOption(this, 'budget', '精品级 · 2000+')"><span class="emoji">🏮</span>精品 · 2000+</button>
+        </div>
+      </div>
+      <div class="qs-step" data-step="result">
+        <div class="result-card">
+          <div class="result-headline">✨ 为你量身打造的汉服方案</div>
+          <p class="result-summary" id="resultSummary">正在为你匹配最适合的穿搭...</p>
+        </div>
+      </div>
+      <div class="qs-progress" id="qsProgress" style="display:none;">
+        <div class="qs-dots" id="qsDots"></div>
+        <button class="btn-outline" onclick="resetQuickstart()">重置</button>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-label">精选内容</span>
+      <h2 class="section-title">今日推荐</h2>
+      <p class="section-subtitle">同袍们正在看什么</p>
+    </div>
+    <div class="content-grid" id="feedGrid"></div>
+  </div>
+
+  <!-- KNOWLEDGE -->
+  <div class="page" id="page-knowledge">
+    <div class="section-header">
+      <span class="section-label">Knowledge System</span>
+      <h2 class="section-title">衣冠谱系</h2>
+      <p class="section-subtitle">从秦汉到明清，系统了解华夏衣冠</p>
+    </div>
+    <div class="dynasty-tabs" id="dynastyTabs"></div>
+    <div class="knowledge-grid" id="knowledgeGrid"></div>
+  </div>
+
+  <!-- MALL -->
+  <div class="page" id="page-mall">
+    <div class="section-header">
+      <span class="section-label">Hanfu Mall</span>
+      <h2 class="section-title">汉服商城</h2>
+      <p class="section-subtitle">定制 · 租赁 · 二手 · 配饰</p>
+    </div>
+    <div class="mall-tabs" id="mallTabs"></div>
+    <div class="content-grid" id="mallGrid"></div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div class="page" id="page-community">
+    <div class="section-header">
+      <span class="section-label">Community</span>
+      <h2 class="section-title">同袍圈</h2>
+      <p class="section-subtitle">分享你的汉服日常，结识志同道合的人</p>
+    </div>
+    <div class="community-layout">
+      <div>
+        <button class="post-btn" onclick="handleNewPost()">✎ 分享你的汉服日常...</button>
+        <div class="post-list" id="postList"></div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <h4>热门话题</h4>
+          <div>
+            <span class="hot-tag">#日常通勤</span>
+            <span class="hot-tag">#第一次穿汉服</span>
+            <span class="hot-tag">#宋制穿搭</span>
+            <span class="hot-tag">#马面裙</span>
+            <span class="hot-tag">#齐胸襦裙</span>
+            <span class="hot-tag">#发型教程</span>
+            <span class="hot-tag">#国风摄影</span>
+            <span class="hot-tag">#平价推荐</span>
+            <span class="hot-tag">#二手转让</span>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>推荐同袍</h4>
+          <div id="recommendUsers"></div>
+        </div>
+        <div class="sidebar-card">
+          <h4>每日一诗</h4>
+          <p class="daily-quote">
+            「云想衣裳花想容，<br>春风拂槛露华浓。」<br><br>
+            <span class="attr">—— 李白《清平调》</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const dynasties = [
+  { id: 'qinhan', name: '秦汉', emoji: '🏛️', color: '#8B4513' },
+  { id: 'weijin', name: '魏晋', emoji: '🎋', color: '#6B8E6F' },
+  { id: 'suatang', name: '隋唐', emoji: '🌸', color: '#B4312A' },
+  { id: 'song', name: '宋代', emoji: '🪷', color: '#3A5A7C' },
+  { id: 'ming', name: '明代', emoji: '🏮', color: '#C9A96E' },
+];
+
+const mallCategories = [
+  { id: 'all', name: '全部', emoji: '🏪' },
+  { id: 'custom', name: '私人定制', emoji: '✂️' },
+  { id: 'sale', name: '服饰出售', emoji: '👘' },
+  { id: 'rental', name: '服饰租赁', emoji: '📦' },
+  { id: 'accessory', name: '配饰周边', emoji: '💎' },
+  { id: 'secondhand', name: '二手交易', emoji: '🔄' },
+];
+
+const knowledgeData = [
+  { dynasty: 'qinhan', title: '深衣与衣裳制度', desc: '上衣下裳是中国最早的服装形制，秦代确立为基本服制，深衣将上下连为一体，奠定后世汉服的基本剪裁逻辑。', emoji: '👘', bg: 'linear-gradient(135deg,#8B4513,#A0522D)' },
+  { dynasty: 'qinhan', title: '曲裾袍与直裾袍', desc: '汉代女子盛行曲裾深衣，衣襟绕身数层，行动时衣袂飘飘；男子则多穿直裾袍，是汉代礼仪场合最常见的服饰。', emoji: '🎐', bg: 'linear-gradient(135deg,#A0522D,#8B4513)' },
+  { dynasty: 'qinhan', title: '丝绸之路与织锦', desc: '汉代丝路繁荣，丝绸、织锦、刺绣工艺达到前所未有的高度，影响了整个欧亚大陆的服饰审美。', emoji: '🧵', bg: 'linear-gradient(135deg,#6B3410,#8B4513)' },
+  { dynasty: 'weijin', title: '褒衣博带', desc: '魏晋文人崇尚宽衣大袖，以"褒衣博带"展现洒脱不羁的风度，服饰趋向飘逸空灵。', emoji: '🎋', bg: 'linear-gradient(135deg,#6B8E6F,#4A6B54)' },
+  { dynasty: 'weijin', title: '杂裾垂髾服', desc: '魏晋女子流行的服饰，下摆裁剪成三角状飘带，行走时随风摇曳，营造飘逸仙逸之感。', emoji: '✨', bg: 'linear-gradient(135deg,#7A9B7A,#6B8E6F)' },
+  { dynasty: 'weijin', title: '魏晋风度与竹林七贤', desc: '穿什么、怎么穿，是一种态度。宽松、随性、不拘小节——衣着本身就是思想的表达。', emoji: '🍃', bg: 'linear-gradient(135deg,#4A6B54,#6B8E6F)' },
+  { dynasty: 'suatang', title: '齐胸襦裙', desc: '唐代最具代表性的女装形制，高腰设计搭配宽大裙摆与帔帛，色彩绚丽，尽显盛世气度。', emoji: '👗', bg: 'linear-gradient(135deg,#B4312A,#D45A4D)' },
+  { dynasty: 'suatang', title: '圆领袍与胡服风尚', desc: '唐代男子常服受西域胡风影响，窄袖紧身便于骑射，体现了兼容并蓄的文化气度。', emoji: '🏇', bg: 'linear-gradient(135deg,#8B1A1A,#B4312A)' },
+  { dynasty: 'suatang', title: '大袖衫与披帛', desc: '晚唐五代女子流行宽大飘逸的大袖衫，搭配轻盈披帛，整体雍容华贵，影响东亚宫廷服饰数百年。', emoji: '🎀', bg: 'linear-gradient(135deg,#D45A4D,#B4312A)' },
+  { dynasty: 'song', title: '褙子与宋制美学', desc: '宋代崇尚简约雅致，女子常穿直领对襟褙子，窄长修身，配色清雅素净，体现清水出芙蓉的审美。', emoji: '🪷', bg: 'linear-gradient(135deg,#3A5A7C,#5A7A9C)' },
+  { dynasty: 'song', title: '宋裤与日常化', desc: '宋代女性开始广泛穿着裤子，两宋服饰日趋日常化、生活化，是汉服走向大众的关键转型期。', emoji: '👖', bg: 'linear-gradient(135deg,#2A4A6C,#3A5A7C)' },
+  { dynasty: 'song', title: '宋制美学的回归', desc: '当代汉服复兴中，宋制以其简约、日常、舒适的特性，成为最受欢迎的形制之一。', emoji: '🍵', bg: 'linear-gradient(135deg,#5A7A9C,#3A5A7C)' },
+  { dynasty: 'ming', title: '马面裙', desc: '明代最具代表性的裙式，前后平整、两侧打褶，穿着端庄大气，是现代汉服复兴的标志性单品。', emoji: '👘', bg: 'linear-gradient(135deg,#8B1A1A,#B4312A)' },
+  { dynasty: 'ming', title: '补服与官制', desc: '明代官员以胸前补子区分品级，文官绣禽、武官绣兽，制度严谨，图案精美，是官服制度的顶峰。', emoji: '🦅', bg: 'linear-gradient(135deg,#6B1818,#8B1A1A)' },
+  { dynasty: 'ming', title: '披风与比甲', desc: '明代女子外罩披风或比甲，保暖兼具造型层次，至今仍是汉服搭配中的经典元素。', emoji: '🧥', bg: 'linear-gradient(135deg,#A0522D,#8B1A1A)' },
+  { dynasty: 'ming', title: '明制的当代复兴', desc: '由于出土文物丰富、史料详尽，明制是当代复原度最高、工艺最成熟的汉服门类。', emoji: '🏮', bg: 'linear-gradient(135deg,#C9A96E,#8B1A1A)' },
+];
+
+const feedItems = [
+  { tag: '穿搭攻略', emoji: '👘', title: '第一次穿汉服上班，怎么选不踩雷？', desc: '5件通勤友好的汉元素单品推荐', bg: 'linear-gradient(135deg,#B4312A,#D45A4D)', tagColor: '#B4312A' },
+  { tag: '形制科普', emoji: '📖', title: '齐胸、齐腰、对襟…一次讲清楚', desc: '新手必看的汉服形制入门 101', bg: 'linear-gradient(135deg,#3A5A7C,#5A7A9C)', tagColor: '#3A5A7C' },
+  { tag: '拍照指南', emoji: '📷', title: '江南园林拍汉服，哪个机位最好看？', desc: '10个宝藏点位+光线建议', bg: 'linear-gradient(135deg,#6B8E6F,#8BA88B)', tagColor: '#6B8E6F' },
+  { tag: '达人精选', emoji: '✨', title: '她把明制穿进了会议室', desc: '看职场女生如何日常驾驭马面裙', bg: 'linear-gradient(135deg,#8B4513,#A0522D)', tagColor: '#8B4513' },
+  { tag: '新品速递', emoji: '🏮', title: '本季最值得入手的5套宋制', desc: '平价到精品，总有一款适合你', bg: 'linear-gradient(135deg,#C9A96E,#E8C782)', tagColor: '#8B6F3A' },
+  { tag: '真实故事', emoji: '💬', title: '从不敢出门到成为日常', desc: '一个普通女生的汉服生活记录', bg: 'linear-gradient(135deg,#8B1A1A,#B4312A)', tagColor: '#8B1A1A' },
+];
+
+const mallItems = [
+  { cat: 'custom', title: '明制马面裙定制 · 真丝织锦', price: '¥680起', desc: '30+种纹样可选，手工打版缝制，工期 15-25 天', emoji: '👘', bg: 'linear-gradient(135deg,#B4312A,#D45A4D)', tag: '高定', badgeColor: '#2B1810' },
+  { cat: 'custom', title: '唐风齐胸襦裙定制', price: '¥520起', desc: '可自选纹样和配色，真丝混纺面料，复刻盛唐气度', emoji: '👗', bg: 'linear-gradient(135deg,#D45A4D,#B4312A)', tag: '热卖', badgeColor: '#B4312A' },
+  { cat: 'sale', title: '织金马面裙 · 凤穿牡丹', price: '¥328', desc: '现货成品，重工织锦面料，四季通用款', emoji: '👘', bg: 'linear-gradient(135deg,#8B1A1A,#B4312A)', tag: '爆款', badgeColor: '#B4312A' },
+  { cat: 'sale', title: '改良汉服日常套装 · 宋制', price: '¥258', desc: '交领上衣+宋裤两件套，棉麻面料，通勤友好', emoji: '👚', bg: 'linear-gradient(135deg,#3A5A7C,#5A7A9C)', tag: '通勤', badgeColor: '#3A5A7C' },
+  { cat: 'rental', title: '婚礼汉服 · 凤冠霞帔全套', price: '¥188/天', desc: '全真丝婚服+凤冠，含专业指导，押金可退', emoji: '👰', bg: 'linear-gradient(135deg,#B4312A,#D45A4D)', tag: '婚庆', badgeColor: '#B4312A' },
+  { cat: 'rental', title: '写真服装租赁礼包', price: '¥99/套', desc: '含内外衣物+配饰，干净整洁，唐宋明多套可选', emoji: '📦', bg: 'linear-gradient(135deg,#8B4513,#A0522D)', tag: '性价比', badgeColor: '#8B4513' },
+  { cat: 'accessory', title: '苏绣团扇定制', price: '¥168起', desc: '苏州绣娘手工绣制，花鸟鱼虫多款可选，搭配点睛', emoji: '🪭', bg: 'linear-gradient(135deg,#6B8E6F,#8BA88B)', tag: '非遗', badgeColor: '#6B8E6F' },
+  { cat: 'accessory', title: '璎珞 · 手工颈饰', price: '¥220起', desc: '玛瑙/翡翠/琉璃材质，手工编织，复原唐风形制', emoji: '💠', bg: 'linear-gradient(135deg,#3A5A7C,#5A7A9C)', tag: '定制', badgeColor: '#5A3A7C' },
+  { cat: 'secondhand', title: '宋制褙子 · 九成新', price: '¥120', desc: '仅穿一次，天丝面料，浅绿色，M码，支持验货', emoji: '👘', bg: 'linear-gradient(135deg,#6B8E6F,#8BA88B)', tag: '九成新', badgeColor: '#6B8E6F' },
+  { cat: 'secondhand', title: '明制马面裙转让', price: '¥180', desc: '织金藏青色，L码，穿过两次，品相完好', emoji: '👗', bg: 'linear-gradient(135deg,#2A4A6C,#3A5A7C)', tag: '闲置', badgeColor: '#666' },
+];
+
+const posts = [
+  { avatar: '#B4312A', initials: '云', user: '云中锦书', time: '2小时前', title: '第一次穿明制马面裙上班，同事都夸了！', content: '纠结了很久终于鼓起勇气穿去公司！配了一件简约白衬衫，不仔细看都不会觉得是汉服。其实日常化真的没那么难，选对面料和配色就好～', imgs: ['👘','💼','✨'], imgBgs: ['#B4312A','#8B4513','#C9A96E'], likes: 286, comments: 62 },
+  { avatar: '#6B8E6F', initials: '墨', user: '墨染青衣', time: '5小时前', title: '自己动手做了一件宋制褙子，过程全记录', content: '从选料到打版到缝制，前后花了一个月。用的是薄款天丝，夏天穿真的很舒服。分享给想自己动手的同袍们！', imgs: ['🪷','🧵'], imgBgs: ['#6B8E6F','#3A5A7C'], likes: 512, comments: 138 },
+  { avatar: '#3A5A7C', initials: '素', user: '素心如简', time: '昨天', title: '第一次穿汉服去踏青，被好多人问了！', content: '终于把压箱底的齐胸襦裙穿出门了！在公园里逛了一下午，被好几个小姐姐问了链接～真的，勇敢穿一次就会有第二次！', imgs: ['🌸','🌱','✨','📷'], imgBgs: ['#D45A7D','#B48E6F','#E8C782','#C9A96E'], likes: 836, comments: 210 },
+  { avatar: '#8B4513', initials: '青', user: '青衫故人', time: '3天前', title: '男生穿汉服的一百种打开方式', content: '分享几套我日常在穿的男生汉元素：圆领袍配牛仔裤、改良裋褐配帆布鞋…其实男生的选择也可以很多样化！', imgs: ['👕','👖','🎋'], imgBgs: ['#5A4A3A','#8B6F4E','#3A5A7C'], likes: 420, comments: 88 },
+];
+
+const recommendUsers = [
+  { avatar: '#B4312A', initials: '云', user: '云中锦书', fans: '2.3万同袍' },
+  { avatar: '#6B8E6F', initials: '墨', user: '墨染青衣', fans: '1.8万同袍' },
+  { avatar: '#3A5A7C', initials: '素', user: '素心如简', fans: '5.2万同袍' },
+  { avatar: '#C9A96E', initials: '锦', user: '锦瑟年华', fans: '8.6千同袍' },
+  { avatar: '#8B4513', initials: '青', user: '青衫故人', fans: '3.1万同袍' },
+];
+
+// ===== STATE =====
+let currentDynasty = 'qinhan';
+let currentMallCat = 'all';
+let qsData = {};
+let isLoggedIn = false;
+let currentUser = null;
+let authMode = 'login';
+
+// ===== RENDER: FEED =====
+function renderFeed() {
+  const grid = document.getElementById('feedGrid');
+  if (!grid) return;
+  grid.innerHTML = feedItems.map(item => `
+    <div class="content-card">
+      <div class="cc-cover" style="background:${item.bg};">
+        <span class="cc-tag" style="color:${item.tagColor};">${item.tag}</span>
+        <span>${item.emoji}</span>
+      </div>
+      <div class="cc-body">
+        <h4>${item.title}</h4>
+        <p>${item.desc}</p>
+        <div class="cc-meta">
+          <span>查看全文 →</span>
+          <span>❤️ 1.2k</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER: KNOWLEDGE =====
+function renderKnowledge() {
+  const tabs = document.getElementById('dynastyTabs');
+  const grid = document.getElementById('knowledgeGrid');
+  if (!tabs || !grid) return;
+
+  tabs.innerHTML = dynasties.map(d => `
+    <button class="dynasty-btn ${d.id === currentDynasty ? 'active' : ''}" onclick="switchDynasty('${d.id}')">${d.emoji} ${d.name}</button>
+  `).join('');
+
+  const list = knowledgeData.filter(k => k.dynasty === currentDynasty);
+  grid.innerHTML = list.map(item => `
+    <div class="knowledge-card" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow-sm)'">
+      <div class="kc-img" style="background:${item.bg};">
+        <span style="font-size:2.8rem;">${item.emoji}</span>
+      </div>
+      <div class="kc-body">
+        <span class="kc-tag">${dynasties.find(d=>d.id===item.dynasty).name}</span>
+        <h4>${item.title}</h4>
+        <p>${item.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchDynasty(id) {
+  currentDynasty = id;
+  renderKnowledge();
+}
+
+// ===== RENDER: MALL =====
+function renderMall() {
+  const tabs = document.getElementById('mallTabs');
+  const grid = document.getElementById('mallGrid');
+  if (!tabs || !grid) return;
+
+  tabs.innerHTML = mallCategories.map(cat => `
+    <button class="mall-btn ${cat.id === currentMallCat ? 'active' : ''}" onclick="switchMallCat('${cat.id}')">${cat.emoji} ${cat.name}</button>
+  `).join('');
+
+  const list = currentMallCat === 'all' ? mallItems : mallItems.filter(i => i.cat === currentMallCat);
+  grid.innerHTML = list.map(item => `
+    <div class="mall-item">
+      <div class="mi-cover" style="background:${item.bg};">
+        <span class="mi-badge">${item.tag}</span>
+        <span>${item.emoji}</span>
+      </div>
+      <div class="mi-body">
+        <h4>${item.title}</h4>
+        <p>${item.desc}</p>
+        <div class="mi-footer">
+          <span class="mi-price">${item.price}</span>
+          <button class="mi-contact" onclick="showToast('已联系商家 · ${item.title}')">联系商家</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchMallCat(id) {
+  currentMallCat = id;
+  renderMall();
+}
+
+// ===== RENDER: POSTS =====
+function renderPosts() {
+  const list = document.getElementById('postList');
+  if (!list) return;
+  list.innerHTML = posts.map((p, i) => `
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar" style="background:${p.avatar};">${p.initials}</div>
+        <div>
+          <div class="post-user">${p.user}</div>
+          <div class="post-time">${p.time}</div>
+        </div>
+      </div>
+      <h3 class="post-title">${p.title}</h3>
+      <p class="post-content">${p.content}</p>
+      <div class="post-images">
+        ${p.imgs.map((img, j) => `<div class="post-img" style="background:linear-gradient(135deg,${p.imgBgs[j]},${p.imgBgs[j]}dd);">${img}</div>`).join('')}
+      </div>
+      <div class="post-actions">
+        <span onclick="toggleLike(${i})">❤️ <span id="like-${i}">${p.likes}</span></span>
+        <span onclick="showToast('查看评论')">💬 ${p.comments}</span>
+        <span onclick="showToast('已收藏')">⭐ 收藏</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleLike(i) {
+  const el = document.getElementById('like-' + i);
+  if (el) { el.textContent = parseInt(el.textContent, 10) + 1; showToast('已点赞 ❤️'); }
+}
+
+// ===== RENDER: RECOMMEND USERS =====
+function renderRecommendUsers() {
+  const list = document.getElementById('recommendUsers');
+  if (!list) return;
+  list.innerHTML = recommendUsers.map(u => `
+    <div class="recommend-user">
+      <div class="post-avatar" style="width:38px;height:38px;background:${u.avatar};border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:0.8rem;">${u.initials}</div>
+      <div style="flex:1;">
+        <div class="ru-name">${u.user}</div>
+        <div class="ru-fans">${u.fans}</div>
+      </div>
+      <button class="ru-follow" onclick="showToast('已关注 ${u.user}')">关注</button>
+    </div>
+  `).join('');
+}
+
+// ===== QUICK START =====
+function chooseOption(el, key, value) {
+  if (key === 'scene') qsData.scene = value;
+  if (key === 'style') qsData.style = value;
+  if (key === 'budget') qsData.budget = value;
+
+  const parent = el.parentElement;
+  [...parent.children].forEach(c => { c.style.background='var(--paper-warm)'; c.style.borderColor='var(--line)'; c.style.color='var(--ink-soft)'; });
+  el.style.background='rgba(180,49,42,0.08)';
+  el.style.borderColor='var(--cinnabar)';
+  el.style.color='var(--cinnabar)';
+
+  const steps = ['scene','style','budget'];
+  const idx = steps.indexOf(key);
+  if (idx < 2) {
+    showStep(idx + 2);
+  } else {
+    showStep('result');
+  }
+}
+
+function showStep(n) {
+  const page = document.getElementById('page-home');
+  page.querySelectorAll('.qs-step').forEach(s => s.style.display='none');
+  const el = page.querySelector('.qs-step[data-step="'+n+'"]');
+  if (el) el.style.display='block';
+  const hint = document.getElementById('qsHint');
+  if (hint) hint.textContent = typeof n === 'number' ? `STEP ${n} / 3` : '完成 ✓';
+  if (n === 'result') generateResult();
+  const prog = document.getElementById('qsProgress');
+  if (prog) prog.style.display = 'flex';
+}
+
+function resetQuickstart() {
+  qsData = {};
+  showStep(1);
+}
+
+function generateResult() {
+  const el = document.getElementById('resultSummary');
+  if (!el) return;
+  const dynastyMap = {
+    '清雅宋制': '宋代', '华丽唐制': '隋唐', '端庄明制': '明代',
+    '简雅汉元素': '宋代', '潇洒魏晋': '魏晋', '都可以': '隋唐'
+  };
+  const dynasty = dynastyMap[qsData.style] || '隋唐';
+  const dynastyInfo = {
+    '秦汉': { desc: '深衣曲裾，奠定华夏衣冠根基', rec: '深衣、曲裾袍、直裾袍' },
+    '魏晋': { desc: '褒衣博带，洒脱不羁的文人风度', rec: '杂裾垂髾服、大袖衫、幅巾' },
+    '隋唐': { desc: '高腰襦裙，尽显盛世繁华气度', rec: '齐胸襦裙、大袖衫、圆领袍' },
+    '宋代': { desc: '褙子宋裤，简约日常的清雅之美', rec: '褙子、宋裤、抹胸、旋裙' },
+    '明代': { desc: '马面霞帔，端庄大气的工艺巅峰', rec: '马面裙、立领袄、披风、比甲' },
+  };
+  const info = dynastyInfo[dynasty];
+  el.innerHTML = `
+    <strong style="color:var(--cinnabar);">${qsData.scene || '日常'} · ${qsData.style || '都可以'}</strong><br>
+    推荐 <strong>${dynasty}</strong> 风格：${info.desc}<br>
+    核心单品：<strong>${info.rec}</strong><br>
+    预算参考：<strong>${qsData.budget || '自选'}</strong>
+  `;
+}
+
+// ===== NAV =====
+function switchPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+}
+
+// ===== MODAL =====
+function openModal(mode) {
+  authMode = mode;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalSeal').textContent = mode === 'register' ? '欢 迎 加 入' : '欢 迎 归 来';
+  document.getElementById('modalTitle').textContent = mode === 'register' ? '加入今日汉服' : '欢迎回来';
+  document.getElementById('modalSub').textContent = mode === 'register' ? '开启你的汉服生活' : '穿一件喜欢的，去做喜欢的事';
+  document.getElementById('authSubmit').textContent = mode === 'register' ? '立即注册' : '登 录';
+  document.getElementById('nameGroup').style.display = mode === 'register' ? 'block' : 'none';
+  document.getElementById('switchText').innerHTML = mode === 'register'
+    ? '已有账号？<span onclick="switchAuthMode()">立即登录</span>'
+    : '还没有账号？<span onclick="switchAuthMode()">立即注册</span>';
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+function switchAuthMode() { openModal(authMode === 'login' ? 'register' : 'login'); }
+
+function handleAuth(e) {
+  e.preventDefault();
+  const account = document.getElementById('inputAccount').value;
+  const password = document.getElementById('inputPassword').value;
+  if (!account || !password) { showToast('请填写完整信息'); return; }
+  isLoggedIn = true;
+  const nickname = document.getElementById('inputName').value || account.substring(0, 3);
+  currentUser = { name: nickname };
+  document.getElementById('userArea').innerHTML = `
+    <span style="font-size:0.85rem;color:var(--ink-soft);">你好，${nickname}</span>
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--cinnabar),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;cursor:pointer;" onclick="logout()">${nickname.charAt(0)}</div>
+  `;
+  closeModal();
+  showToast('登录成功 · 欢迎回来');
+}
+
+function logout() {
+  isLoggedIn = false; currentUser = null;
+  document.getElementById('userArea').innerHTML = `
+    <button class="btn-outline" onclick="openModal('login')">登录</button>
+    <button class="btn-primary" onclick="openModal('register')">注册</button>
+  `;
+  showToast('已退出登录');
+}
+
+function handleNewPost() {
+  if (!isLoggedIn) { openModal('login'); showToast('请先登录后再发布'); return; }
+  showToast('打开发布器 · 敬请期待');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(window._t);
+  window._t = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+// ===== INIT =====
+function init() {
+  renderFeed();
+  renderKnowledge();
+  renderMall();
+  renderPosts();
+  renderRecommendUsers();
+  document.querySelectorAll('.nav-tabs button').forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+  showToast('欢迎来到今日汉服');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+// globals
+window.switchPage = switchPage;
+window.switchDynasty = switchDynasty;
+window.switchMallCat = switchMallCat;
+window.chooseOption = chooseOption;
+window.resetQuickstart = resetQuickstart;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.switchAuthMode = switchAuthMode;
+window.handleAuth = handleAuth;
+window.logout = logout;
+window.handleNewPost = handleNewPost;
+window.toggleLike = toggleLike;
+window.showToast = showToast;
+</script>
+</body>
+</html>
